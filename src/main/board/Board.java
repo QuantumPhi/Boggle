@@ -1,13 +1,15 @@
 package main.board;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import list.WordList;
 import list.node.Nexus;
+import main.board.util.ArrayUtils;
 
 public class Board {   
+    private List<String> words;
+    
     private char[][] board;
     
     private Nexus nexus;
@@ -23,71 +25,62 @@ public class Board {
     private void init(String values, int dimension) {
         //Set "values" string to lower case for homogeniety
         values = values.toLowerCase();
+        //Sets up list of words
+        words = new ArrayList<>();
         //Set up nexus
         nexus = new Nexus(values.toCharArray());
         //Sets up board
         board = new char[dimension][dimension];
         int index = 0;
-        //Inputs values into board
-        for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[i].length; j++) {
-                board[i][j] = values.charAt(index);
+        for (char[] subBoard : board) {
+            for (int j = 0; j < subBoard.length; j++) {
+                subBoard[j] = values.charAt(index);
                 index++;
             }
         }
     }
     
     public String[] getWords() {
-        List<String> words = new ArrayList<>();
         for(int i = 0; i < board.length; i++)
             for(int j = 0; j < board[i].length; j++)
-                words.addAll(Arrays.asList(getWordsForChar(i, j)));
+                getWordsForChar(i, j);
         return simplify(words.toArray(new String[words.size()]));
     }
     
-    private String[] getWordsForChar(int index1, int index2) {
-        List<String> words = new ArrayList<>();
-        boolean[][] pastIndices = new boolean[board.length][board[0].length];
+    private void getWordsForChar(int index1, int index2) {
         String currentString = new String();
+        boolean[][] pastIndices = new boolean[board.length][board[0].length];
         pastIndices[index1][index2] = true;
         currentString += board[index1][index2];
         if(WordList.isWord(currentString))
             words.add(currentString);
-        if(WordList.charsAfterPrefix(currentString).length == 0)
-            return words.toArray(new String[words.size()]);
+        if(nexus.getBranchNode(currentString) == null || 
+                !nexus.getBranchNode(currentString).hasSubNodes())
+            return;
+        if(ArrayUtils.isComplete(pastIndices))
+            return;
         int[][] indices = getAdjacentChars(index1, index2);
-        for(int[] index : indices) {
-            if(isValid(index[0], index[1]) && 
-                    !pastIndices[index[0]][index[1]] && 
-                    WordList.charsAfterPrefix(currentString + board[index[0]][index[1]]).length != 0) {
-                boolean[][] newIndices = new boolean[pastIndices.length][pastIndices[0].length];
-                for(int i = 0; i < pastIndices.length; i++)
-                    System.arraycopy(pastIndices[i], 0, newIndices[i], 0, pastIndices[i].length);
-                words.addAll(Arrays.asList(getWordsForChar(index[0], index[1], currentString, pastIndices.clone())));
-            }
-        }
-        return words.toArray(new String[words.size()]);
+        for(int[] index : indices)
+            if(isValid(index[0], index[1]) && !pastIndices[index[0]][index[1]])
+                getWordsForChar(index[0], index[1], currentString, ArrayUtils.cloneBoolean(pastIndices));
     }
     
-    private String[] getWordsForChar(int index1, int index2, String currentString,  boolean[][] pastIndices) {
-        List<String> words = new ArrayList<>();
+    private void getWordsForChar(int index1, int index2, String currentString,  boolean[][] pastIndices) {
         pastIndices[index1][index2] = true;
         currentString += board[index1][index2];
         if(WordList.isWord(currentString))
             words.add(currentString);
+        if(nexus.getBranchNode(currentString) == null || 
+                !nexus.getBranchNode(currentString).hasSubNodes())
+            return;
+        if(ArrayUtils.isComplete(pastIndices))
+            return;
         int[][] indices = getAdjacentChars(index1, index2);
-        for(int[] index : indices) {
-            if(isValid(index[0], index[1]) && 
-                    !pastIndices[index[0]][index[1]] && 
-                    WordList.charsAfterPrefix(currentString + board[index[0]][index[1]]).length != 0) {
-                boolean[][] newIndices = new boolean[pastIndices.length][pastIndices[0].length];
-                for(int i = 0; i < pastIndices.length; i++)
-                    System.arraycopy(pastIndices[i], 0, newIndices[i], 0, pastIndices[i].length);
-                words.addAll(Arrays.asList(getWordsForChar(index[0], index[1], currentString, pastIndices.clone())));
-            }
-        }
-        return words.toArray(new String[words.size()]);
+        for(int[] index : indices)
+            if(isValid(index[0], index[1]) && !pastIndices[index[0]][index[1]])
+                getWordsForChar(index[0], index[1], currentString, ArrayUtils.cloneBoolean(pastIndices));
     }
+    
     private String[] simplify(String[] words) {
         List<String> simpleWords = new ArrayList<>();
         for(String word : words)
@@ -116,23 +109,10 @@ public class Board {
         };
     }
     
-    private boolean isComplete(boolean[][] indices) {
-        //Checks if the index array is completely true
-        for(int i = 0; i < indices.length; i++)
-            for(int j = 0; j < indices[i].length; j++)
-                if(!indices[i][j])
-                    return false;
-        return true;
-    }
-    
     private boolean isValid(int index1, int index2) {
         //Checks if the given indices are withing the board bounds
         return ((index1 >= 0 && index1 < board.length) &&
                 (index2 >= 0 && index2 < board[index1].length));
-    }
-    
-    private static boolean contains(char[] set, char character) {
-        return new String(set).indexOf(character) != -1;
     }
     
     @Override

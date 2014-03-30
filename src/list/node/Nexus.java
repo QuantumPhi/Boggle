@@ -11,16 +11,16 @@ public class Nexus {
         for(int i = 0; i < nodes.length; i++)
             nodes[i] = new Node(characters[i]);
     }
+        
+    public Node getBranchNode(String string) {
+        return getBranch(string.charAt(0)).getNode(string);
+    }
     
-    public Node getNode(char character) {
+    private Node getBranch(char character) {
         for(Node node : nodes)
             if(node.nodeCharacter() == character)
                 return node;
         return null;
-    }
-    
-    public Node getNode(String string) {
-        return getNode(string.charAt(0)).getNode(string);
     }
     
     private static char[] filter(char[] characters) {
