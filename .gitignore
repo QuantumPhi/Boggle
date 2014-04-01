@@ -1,4 +1,6 @@
 /build/
 /nbproject/
+/dist/
+/src/list/node/
 /build.xml
-/manifest.mf
+/manifest.mf/
