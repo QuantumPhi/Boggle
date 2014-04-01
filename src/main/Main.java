@@ -16,7 +16,10 @@ public class Main {
         
         Board board = new Board(boardString);
         System.out.println(board);
+        long sTime = System.currentTimeMillis();
         System.out.println(parseBoardOutput(board.getWords()));
+        long eTime = System.currentTimeMillis();
+        System.out.println(eTime-sTime + " Milliseconds");
     }
     
     private static String parseBoardOutput(String[] output) {

@@ -7,8 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import list.sort.Searcher;
 
 public class WordList {
     private static List<String> wordlist;
@@ -29,6 +29,8 @@ public class WordList {
         }
     }
     
+    public static List<String> getList() { return wordlist; }
+    
     public static String get(int index) { return wordlist.get(index); }
     public static String get(String word) {
         int index = wordlist.indexOf(word);
@@ -37,7 +39,7 @@ public class WordList {
     
     public static char[] charsAfterPrefix(String prefix) {
         String charList = new String();
-        int index = Math.abs(Collections.binarySearch(wordlist, prefix) + 1);
+        int index = Math.abs(Searcher.binarySearch(wordlist, prefix)) + 1;
         for(int i = index; i < wordlist.size(); i++) {
             if(wordlist.get(i).length() > prefix.length()) {
                 if(wordlist.get(i).substring(0, prefix.length()).equals(prefix))
@@ -50,7 +52,7 @@ public class WordList {
     }
     
     public static boolean isWord(String word) {
-        return !get(word).isEmpty();
+        return Searcher.binarySearch(wordlist, word) >= 0;
     }
     
     public static char[] simplify(String characters) {
