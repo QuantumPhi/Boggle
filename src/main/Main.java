@@ -16,14 +16,19 @@ public class Main {
         
         Board board = new Board(boardString);
         System.out.println(board);
-        long sTime = System.currentTimeMillis();
+        long sTime = System.nanoTime();
         System.out.println(parseBoardOutput(board.getWords()));
-        long eTime = System.currentTimeMillis();
-        System.out.println(eTime-sTime + " Milliseconds");
+        long eTime = System.nanoTime();
+        double deltaTime = (eTime - sTime) / (double)1000000;
+        System.out.printf("%4.4f Milliseconds\n", deltaTime);
     }
     
     private static String parseBoardOutput(String[] output) {
         StringBuilder returnString = new StringBuilder();
+        
+        int length = output.length;
+        returnString.append("Found ").append(length)
+                .append(length != 1 ? " words:\n" : " word:\n");
         
         for(String word : output)
             returnString.append(word).append("\n");

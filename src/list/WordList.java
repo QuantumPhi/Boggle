@@ -39,7 +39,8 @@ public class WordList {
     
     public static char[] charsAfterPrefix(String prefix) {
         String charList = new String();
-        int index = Math.abs(Searcher.binarySearch(wordlist, prefix)) + 1;
+        int value = Searcher.binarySearch(wordlist, prefix);
+        int index = value >= 0 ? value : Math.abs(value) - 1;
         for(int i = index; i < wordlist.size(); i++) {
             if(wordlist.get(i).length() > prefix.length()) {
                 if(wordlist.get(i).substring(0, prefix.length()).equals(prefix))
