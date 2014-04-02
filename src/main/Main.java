@@ -5,6 +5,8 @@ import list.WordList;
 import main.board.Board;
 
 public class Main {
+    private static final int MIN_LENGTH = 4;
+    
     private static final Scanner in = new Scanner(System.in);
     
     public static void main(String[] args) {
@@ -25,13 +27,17 @@ public class Main {
     
     private static String parseBoardOutput(String[] output) {
         StringBuilder returnString = new StringBuilder();
+
+        int count = 0;
         
-        int length = output.length;
-        returnString.append("Found ").append(length)
-                .append(length != 1 ? " words:\n" : " word:\n");
+        for(String word : output) {
+            if(word.length() >= MIN_LENGTH) {
+                returnString.append(word).append("\n");
+                count++;
+            }
+        }
         
-        for(String word : output)
-            returnString.append(word).append("\n");
+        returnString.insert(0, "Found " + count + (count != 1 ? " words:\n" : " word:\n"));
         
         return returnString.toString();
     }

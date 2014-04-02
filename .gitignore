@@ -1,5 +1,6 @@
 /build/
 /nbproject/
+/dist/
+/src/test/
 /build.xml
 /manifest.mf
-/src/test/

@@ -32,10 +32,6 @@ public class WordList {
     public static List<String> getList() { return wordlist; }
     
     public static String get(int index) { return wordlist.get(index); }
-    public static String get(String word) {
-        int index = wordlist.indexOf(word);
-        return (index != -1 ? wordlist.get(index) : "");
-    }
     
     public static char[] charsAfterPrefix(String prefix) {
         String charList = new String();
