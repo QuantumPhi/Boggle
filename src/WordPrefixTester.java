@@ -1,5 +1,3 @@
-package test;
-
 // Use this template to check your work on WordPrefix. This is an
 // example that compiles. Of course you should use your own WordPrefix
 // class and main() method to test. For purposes of this test (only),
@@ -29,7 +27,7 @@ public class WordPrefixTester extends WordPrefixCanonical implements WordPrefixT
    }
 
    public static void main(String[] args) {
-      String[] wordList = WordPrefixCanonical.readWordList("wordlist_big");
+      String[] wordList = WordPrefixCanonical.readWordList("src//list//wordlist.txt");
       WordPrefixTemplate prefixTemplate = new WordPrefixTester(wordList);
       new BoggleCanonical(wordList, "tuwopsbem", 4, prefixTemplate, false);
    }

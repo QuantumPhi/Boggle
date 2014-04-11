@@ -1,3 +1,5 @@
+package test;
+
 interface WordPrefixTemplate {
     // implementers should just call the copy constructor on this
     // object and return a reference to the new object.
