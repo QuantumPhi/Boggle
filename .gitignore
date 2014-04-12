@@ -1,6 +1,8 @@
 /build/
 /nbproject/
 /dist/
+/src/main/
 /src/list/node/
+/src/list/WordList.java
 /build.xml
-/manifest.mf/
+/manifest.mf

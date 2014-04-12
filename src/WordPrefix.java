@@ -1,23 +1,20 @@
 import list.sort.Searcher;
 
 public class WordPrefix implements WordPrefixTemplate {
-    private String[] wordlist;
+    private static String[] wordlist;
     private String prefix;
     
-    public WordPrefix(String[] wordlist) { 
-        this.prefix = prefix != null ? prefix : "";
-        this.wordlist = wordlist;
+    public WordPrefix(String[] wordList) { 
+        this.prefix = "";
+        wordlist = wordList;
     }
     
-    private WordPrefix(String prefix, String[] wordlist) {
+    private WordPrefix(String prefix) {
         this.prefix = prefix != null ? prefix : "";
-        this.wordlist = wordlist;
     }
     
     @Override
-    public WordPrefix makeNewFromTemplate() { 
-        return new WordPrefix(this.prefix, wordlist); 
-    }
+    public WordPrefix makeNewFromTemplate() { return new WordPrefix(this.prefix); }
     
     public static void main(String[] args) {
         String[] wordlist = WordPrefixCanonical.readWordList("src//list//wordlist.txt");
@@ -41,7 +38,7 @@ public class WordPrefix implements WordPrefixTemplate {
     public boolean isPrefix() {
         int index = Searcher.binarySearch(wordlist, prefix);
         index = index >= 0 ? index : -index - 1;
-        return wordlist[index].length() <= prefix.length() || 
+        return wordlist[index].length() >= prefix.length() && 
                 wordlist[index].substring(0, prefix.length()).equals(prefix);
     }
 }

@@ -7,7 +7,7 @@ public class Searcher {
         int low = 0;
         int high  = list.size() - 1;
         while(low <= high) {
-            int mid = (high + low) / 2;
+            int mid = (high + low) >>> 1;
             int compare = list.get(mid).compareTo(word);
             if(compare < 0)
                 low = mid + 1;
@@ -23,7 +23,7 @@ public class Searcher {
         int low = 0;
         int high  = list.length- 1;
         while(low <= high) {
-            int mid = (high + low) / 2;
+            int mid = (high + low) >>> 1;
             int compare = list[mid].compareTo(word);
             if(compare < 0)
                 low = mid + 1;
