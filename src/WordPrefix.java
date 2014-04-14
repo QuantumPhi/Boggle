@@ -3,18 +3,19 @@ import list.sort.Searcher;
 public class WordPrefix implements WordPrefixTemplate {
     private static String[] wordlist;
     private String prefix;
+    private int index;
     
-    public WordPrefix(String[] wordList) { 
+    public WordPrefix(String[] wordList) {
         this.prefix = "";
         wordlist = wordList;
     }
     
-    private WordPrefix(String prefix) {
-        this.prefix = prefix != null ? prefix : "";
-    }
+    private WordPrefix(String prefix) { this.prefix = prefix; }
+    
+    private WordPrefix(String prefix, int index) { this.prefix = prefix; this.index = index; }
     
     @Override
-    public WordPrefix makeNewFromTemplate() { return new WordPrefix(this.prefix); }
+    public WordPrefix makeNewFromTemplate() { return new WordPrefix(this.prefix, this.index); }
     
     public static void main(String[] args) {
         String[] wordlist = WordPrefixCanonical.readWordList("src//list//wordlist.txt");
@@ -23,7 +24,7 @@ public class WordPrefix implements WordPrefixTemplate {
    }
     
     @Override
-    public void add(String addition) { prefix += addition; }
+    public void add(String addition) { prefix += addition;  index = Searcher.binarySearch(wordlist, prefix); }
     
     @Override
     public String getText() { return prefix; }
@@ -32,13 +33,12 @@ public class WordPrefix implements WordPrefixTemplate {
     public int length() { return prefix.length(); }
     
     @Override
-    public boolean isWord() { return Searcher.binarySearch(wordlist, prefix) >= 0; }
+    public boolean isWord() { return index >= 0; }
     
     @Override
     public boolean isPrefix() {
-        int index = Searcher.binarySearch(wordlist, prefix);
-        index = index >= 0 ? index : -index - 1;
-        return wordlist[index].length() >= prefix.length() && 
-                wordlist[index].substring(0, prefix.length()).equals(prefix);
+        int nIndex = index >= 0 ? index : -index - 1;
+        return wordlist[nIndex].length() >= prefix.length() && 
+                wordlist[nIndex].substring(0, prefix.length()).equals(prefix);
     }
 }
