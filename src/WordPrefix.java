@@ -1,5 +1,3 @@
-import list.sort.Searcher;
-
 public class WordPrefix implements WordPrefixTemplate {
     private static String[] wordlist;
     private String prefix;
@@ -24,7 +22,10 @@ public class WordPrefix implements WordPrefixTemplate {
    }
     
     @Override
-    public void add(String addition) { prefix += addition;  index = Searcher.binarySearch(wordlist, prefix); }
+    public void add(String addition) { 
+        prefix += addition;  
+        index = binarySearch(wordlist, prefix); 
+    }
     
     @Override
     public String getText() { return prefix; }
@@ -40,5 +41,21 @@ public class WordPrefix implements WordPrefixTemplate {
         int nIndex = index >= 0 ? index : -index - 1;
         return wordlist[nIndex].length() >= prefix.length() && 
                 wordlist[nIndex].substring(0, prefix.length()).equals(prefix);
+    }
+    
+    public static int binarySearch(String[] list, String word) {
+        int low = 0;
+        int high  = list.length- 1;
+        while(low <= high) {
+            int mid = (high + low) >>> 1;
+            int compare = list[mid].compareTo(word);
+            if(compare < 0)
+                low = mid + 1;
+            else if(compare > 0)
+                high = mid - 1;
+            else if(compare == 0)
+                return mid;
+        }
+        return -(low + 1);
     }
 }
